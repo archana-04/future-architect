@@ -61,6 +61,14 @@ export const generateFutureSimulation = (profile: UserProfile): FutureSimulation
   const dreamCareerLower = dreamCareer.toLowerCase();
   const focus =
     theme === 'cloud' ? 'cloud architecture' : theme === 'ai' ? 'applied AI' : theme === 'startup' ? 'venture building' : theme === 'data' ? 'data systems' : 'career growth';
+  const trailerVideoUrl =
+    theme === 'ai'
+      ? 'https://videos.pexels.com/video-files/17431330/17431330-uhd_2560_1440_25fps.mp4'
+      : theme === 'cloud'
+        ? 'https://videos.pexels.com/video-files/854089/854089-hd_1920_1080_25fps.mp4'
+        : theme === 'startup'
+          ? 'https://videos.pexels.com/video-files/7683509/7683509-hd_1920_1080_25fps.mp4'
+          : 'https://www.w3schools.com/html/mov_bbb.mp4';
 
   const timeline = [
     {
@@ -160,6 +168,7 @@ export const generateFutureSimulation = (profile: UserProfile): FutureSimulation
       },
     ],
     trailer: `${name} begins as a ${roleLower} with a vision. With ${skillsText || topSkill} as the engine and ${goalsText || goalOne} as the destination, the story builds toward becoming a ${dreamCareerLower} who leaves a lasting mark.`,
+    trailerVideoUrl,
     achievements: [
       {
         label: 'Career Growth',

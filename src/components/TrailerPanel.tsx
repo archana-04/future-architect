@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 interface TrailerPanelProps {
   title: string;
   script: string;
+  videoUrl: string;
 }
 
-export function TrailerPanel({ title, script }: TrailerPanelProps) {
+export function TrailerPanel({ title, script, videoUrl }: TrailerPanelProps) {
   const [text, setText] = useState('');
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export function TrailerPanel({ title, script }: TrailerPanelProps) {
   return (
     <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 shadow-glow">
       <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="relative min-h-[280px] bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.2),_transparent_40%),linear-gradient(135deg,_rgba(15,23,42,1),_rgba(2,6,23,1))] p-8">
+        <div className="relative min-h-[280px] overflow-hidden bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.2),_transparent_40%),linear-gradient(135deg,_rgba(15,23,42,1),_rgba(2,6,23,1))] p-8">
           <div className="absolute inset-0 opacity-30">
             <div className="absolute left-8 top-8 h-32 w-32 rounded-full border border-cyan-400/20" />
             <div className="absolute left-16 top-16 h-44 w-44 rounded-full border border-fuchsia-400/15" />
@@ -40,13 +41,30 @@ export function TrailerPanel({ title, script }: TrailerPanelProps) {
               Future Trailer
             </div>
 
+            <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50">
+              <video
+                src={videoUrl}
+                controls
+                preload="metadata"
+                className="aspect-video w-full object-cover"
+                poster="https://images.pexels.com/photos/2150/sky-space-dark-galaxy.jpg"
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+
             <div className="space-y-4">
               <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Cinematic reveal</p>
               <h3 className="font-space text-3xl font-semibold text-white sm:text-4xl balanced-text">{title}</h3>
-              <button className="inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-400/20 hover:scale-[1.01]">
+              <a
+                href={videoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:scale-[1.01] hover:bg-cyan-400/20"
+              >
                 <Play className="h-4 w-4" />
-                Play Trailer
-              </button>
+                Open Full Video
+              </a>
             </div>
           </div>
         </div>

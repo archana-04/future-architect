@@ -44,6 +44,7 @@ export interface FutureSimulation {
   newspaper: FutureArticle;
   mentors: MentorAdvice[];
   trailer: string;
+  trailerVideoUrl: string;
   achievements: AchievementCardData[];
   scores: FutureScore[];
 }

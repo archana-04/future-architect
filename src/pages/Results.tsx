@@ -1,7 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { AchievementCards } from '../components/AchievementCards';
+import { AgentChatPanel } from '../components/AgentChatPanel';
 import { Footer } from '../components/Footer';
+import { GoalCompletionTracker } from '../components/GoalCompletionTracker';
+import { GoalRoadmapPanel } from '../components/GoalRoadmapPanel';
+import { InterestUpdatesPanel } from '../components/InterestUpdatesPanel';
 import { MentorPanel } from '../components/MentorPanel';
 import { Navbar } from '../components/Navbar';
 import { Newspaper } from '../components/Newspaper';
@@ -11,10 +16,50 @@ import { useFuture } from '../context/FutureContext';
 
 export function Results() {
   const { futureData, profile } = useFuture();
+  const [completedGoals, setCompletedGoals] = useState<Record<string, boolean>>({});
+
+  const goalStorageKey = useMemo(() => {
+    if (!profile) return '';
+    return `futureGoalProgress:${profile.name}:${profile.dreamCareer}`;
+  }, [profile]);
+
+  const goals = profile?.goals ?? [];
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  useEffect(() => {
+    if (!goalStorageKey) {
+      setCompletedGoals({});
+      return;
+    }
+
+    const savedGoals = window.localStorage.getItem(goalStorageKey);
+    if (!savedGoals) {
+      setCompletedGoals({});
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(savedGoals) as Record<string, boolean>;
+      setCompletedGoals(parsed);
+    } catch {
+      setCompletedGoals({});
+    }
+  }, [goalStorageKey]);
+
+  useEffect(() => {
+    if (!goalStorageKey) return;
+    window.localStorage.setItem(goalStorageKey, JSON.stringify(completedGoals));
+  }, [completedGoals, goalStorageKey]);
+
+  const toggleGoal = (goal: string) => {
+    setCompletedGoals(previous => ({
+      ...previous,
+      [goal]: !previous[goal],
+    }));
+  };
 
   if (!futureData || !profile) {
     return (
@@ -66,6 +111,15 @@ export function Results() {
                 ))}
               </div>
             </div>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/history"
+                className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-400/20"
+              >
+                Revisit previous searches
+              </Link>
+            </div>
           </section>
 
           <SectionShell title="Future Achievement Overview" description="A concise view of the trajectory, leadership, innovation, and long-term impact." delay="0ms">
@@ -84,8 +138,24 @@ export function Results() {
             <MentorPanel mentors={futureData.mentors} />
           </SectionShell>
 
-          <SectionShell title="Future Movie Trailer" description="A cinematic summary of the future, revealed with a typewriter animation." delay="360ms">
-            <TrailerPanel title={`${profile.name}'s Future Trailer`} script={futureData.trailer} />
+          <SectionShell title="Follow-up Chat" description="Continue the conversation with your result context already loaded." delay="315ms">
+            <AgentChatPanel profile={profile} simulation={futureData} />
+          </SectionShell>
+
+          <SectionShell title="Goal Completion Tracker" description="Trace your progress and keep a measurable view of completion." delay="345ms">
+            <GoalCompletionTracker goals={goals} completedMap={completedGoals} onToggleGoal={toggleGoal} />
+          </SectionShell>
+
+          <SectionShell title="Action Roadmap" description="A practical roadmap so users can focus on execution instead of repeated reminders." delay="352ms">
+            <GoalRoadmapPanel goals={goals} skills={profile.skills} timeline={futureData.timeline} />
+          </SectionShell>
+
+          <SectionShell title="Interest Knowledge Feed" description="Stay updated with practical knowledge and trend updates in your field." delay="360ms">
+            <InterestUpdatesPanel profile={profile} />
+          </SectionShell>
+
+          <SectionShell title="Future Movie Trailer" description="A cinematic summary of the future with playable video and narration." delay="390ms">
+            <TrailerPanel title={`${profile.name}'s Future Trailer`} script={futureData.trailer} videoUrl={futureData.trailerVideoUrl} />
           </SectionShell>
         </div>
       </main>

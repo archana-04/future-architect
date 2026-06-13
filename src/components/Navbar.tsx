@@ -33,6 +33,14 @@ export function Navbar() {
           >
             Results
           </NavLink>
+          <NavLink
+            to="/history"
+            className={({ isActive }) =>
+              `rounded-full px-4 py-2 transition ${isActive ? 'bg-white text-slate-950 shadow-lg' : 'hover:bg-white/10 hover:text-white'}`
+            }
+          >
+            History
+          </NavLink>
         </nav>
       </div>
     </header>
