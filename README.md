@@ -51,8 +51,6 @@ src/
 │   └── Results.tsx     # Results page
 ├── types/              # TypeScript type definitions
 │   └── user.ts        # User and simulation types
-├── data/              # Mock data
-│   └── mockFutureData.ts # Realistic simulation data
 ├── App.tsx            # Main app with routing
 ├── main.tsx           # Vite entry point
 └── index.css          # Global styles and animations
@@ -146,18 +144,19 @@ The user form includes validation for:
 
 ## 💾 Data Persistence
 
-User profiles are stored in browser localStorage:
+User profiles and generated simulations are synchronized through the app context and persisted in browser localStorage:
 ```javascript
-localStorage.setItem('userProfile', JSON.stringify(profile));
+localStorage.setItem('futureProfile', JSON.stringify(profile));
+localStorage.setItem('futureSimulation', JSON.stringify(simulation));
 ```
 
-## 🎬 Mock Data
+## 🎬 Simulation Data
 
-The application uses realistic mock data in `src/data/mockFutureData.ts`:
+The application now generates future content from the submitted profile via `src/services/simulation.ts`:
 - Personalized timeline events
-- AI-generated newspaper article
-- Expert mentor advice
-- Cinematic narration
+- Profile-driven newspaper article
+- Personalized mentor advice
+- Cinematic narration tailored to the user
 
 ## 📱 Responsive Design
 
@@ -194,8 +193,8 @@ colors: {
 ### Animations
 Modify `src/index.css` for custom animations and timing.
 
-### Mock Data
-Update `src/data/mockFutureData.ts` to change simulation content.
+### Simulation Logic
+Update `src/services/simulation.ts` to change how future content is generated from user input.
 
 ## 📈 Future Enhancements
 
@@ -229,6 +228,6 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Built with ❤️ by Archana**
+**Built for Future Me AI**
 
 Transform your future, today! 🚀
